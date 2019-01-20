@@ -16,6 +16,20 @@ class UtilTests {
 
         "abc" shouldNotEqual 123
         123 shouldNotEqual "abc"
+
+        booleanArrayOf(true) shouldEqual booleanArrayOf(true)
+        byteArrayOf(1) shouldEqual byteArrayOf(1)
+        charArrayOf('a') shouldEqual charArrayOf('a')
+        shortArrayOf(1) shouldEqual shortArrayOf(1)
+        intArrayOf(1) shouldEqual intArrayOf(1)
+        longArrayOf(1L) shouldEqual longArrayOf(1L)
+        floatArrayOf(1.0f) shouldEqual floatArrayOf(1.0f)
+        doubleArrayOf(1.0) shouldEqual doubleArrayOf(1.0)
+
+        emptyArray<Int>() shouldEqual emptyArray()
+        arrayOf(1) shouldEqual arrayOf(1)
+        arrayOf(1, 2, "foo") shouldEqual arrayOf(1, 2, "foo")
+        arrayOfNulls<Int>(size = 1) shouldEqual arrayOfNulls(size = 1)
     }
 
     @Test fun `failing assertions`() {
@@ -40,6 +54,31 @@ class UtilTests {
         expectFailure({ 1 shouldNotEqual 1 }, """
             Expected value not equal to: 1
             """.trimIndent()
+        )
+
+        expectFailure({ arrayOf(1) shouldEqual arrayOf(1, 2) }, """
+            |
+            |Expected: [1, 2]
+            | but: was [1]
+            """.trimMargin()
+        )
+        expectFailure({ intArrayOf(1) shouldEqual intArrayOf(1, 2) }, """
+            |
+            |Expected: [1, 2]
+            | but: was [1]
+            """.trimMargin()
+        )
+        expectFailure({ intArrayOf(1, 2) shouldEqual arrayOf(1, 2) }, """
+            |
+            |Expected: [1, 2] (class kotlin.Array)
+            | but: was [1, 2] (class kotlin.IntArray)
+            """.trimMargin()
+        )
+        expectFailure({ arrayOfNulls<Int>(size = 1) shouldEqual arrayOfNulls(size = 3) }, """
+            |
+            |Expected: [null, null, null]
+            | but: was [null]
+            """.trimMargin()
         )
     }
 

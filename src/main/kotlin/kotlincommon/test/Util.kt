@@ -5,13 +5,15 @@ package kotlincommon.test
 import kotlincommon.test.FailedAssertionFinder.withAssertionError
 import java.io.File
 import java.io.IOException
+import java.util.*
 
 
-infix fun <T> T.shouldEqual(that: T) = withAssertionError("shouldEqual") {
+infix fun <T> T.shouldEqual(that: T) = FailedAssertionFinder.withAssertionError("shouldEqual") {
     if (this == that) return
+    if (this != null && that != null && areEqualArrays(this, that)) return
 
     val (expectedPostfix, actualPostfix) =
-        if (this != null && that != null && this.toString() == that.toString()) {
+        if (this != null && that != null && this.toPrintableString() == that.toPrintableString()) {
             // Cast to Any because of this issue https://youtrack.jetbrains.com/issue/KT-20778
             Pair(
                 " (class " + (that as Any)::class.qualifiedName + ")",
@@ -25,14 +27,42 @@ infix fun <T> T.shouldEqual(that: T) = withAssertionError("shouldEqual") {
     // so that IJ unit testing plugin can detect it and show <Click to see difference> link.
     // Note that `this` and `that` are printed on the same column on purpose so that it's easier to compare them visually.
     throw AssertionError(
-        "\nExpected: $that$expectedPostfix" +
-        "\n but: was $this$actualPostfix"
+        "\nExpected: ${that.toPrintableString()}$expectedPostfix" +
+        "\n but: was ${this.toPrintableString()}$actualPostfix"
     )
 }
 
 infix fun <T> T.shouldNotEqual(that: T) = withAssertionError("shouldNotEqual") {
     if (this == that) throw AssertionError("Expected value not equal to: $that")
 }
+
+private fun Any?.toPrintableString(): String =
+    when {
+        this is Array<*>     -> Arrays.toString(this)
+        this is BooleanArray -> Arrays.toString(this)
+        this is ByteArray    -> Arrays.toString(this)
+        this is CharArray    -> Arrays.toString(this)
+        this is ShortArray   -> Arrays.toString(this)
+        this is IntArray     -> Arrays.toString(this)
+        this is LongArray    -> Arrays.toString(this)
+        this is FloatArray   -> Arrays.toString(this)
+        this is DoubleArray  -> Arrays.toString(this)
+        else                 -> this.toString()
+    }
+
+private fun areEqualArrays(o1: Any, o2: Any): Boolean =
+    when {
+        o1 is Array<*> && o2 is Array<*>         -> Arrays.deepEquals(o1, o2)
+        o1 is BooleanArray && o2 is BooleanArray -> Arrays.equals(o1, o2)
+        o1 is ByteArray && o2 is ByteArray       -> Arrays.equals(o1, o2)
+        o1 is CharArray && o2 is CharArray       -> Arrays.equals(o1, o2)
+        o1 is ShortArray && o2 is ShortArray     -> Arrays.equals(o1, o2)
+        o1 is IntArray && o2 is IntArray         -> Arrays.equals(o1, o2)
+        o1 is LongArray && o2 is LongArray       -> Arrays.equals(o1, o2)
+        o1 is FloatArray && o2 is FloatArray     -> Arrays.equals(o1, o2)
+        o1 is DoubleArray && o2 is DoubleArray   -> Arrays.equals(o1, o2)
+        else                                     -> false
+    }
 
 
 object FailedAssertionFinder {
@@ -66,6 +96,7 @@ object FailedAssertionFinder {
         }
 
     private fun findSourceCodeFor(className: String): File? {
+        // TODO configurable path
         val paths1 = listOf("src", "")
         val paths2 = listOf("test", "main", "")
         val paths3 = listOf("kotlin", "java", "")
