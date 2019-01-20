@@ -96,23 +96,28 @@ object FailedAssertionFinder {
         }
 
     private fun findSourceCodeFor(className: String): File? {
-        // TODO configurable path
-        val paths1 = listOf("src", "")
-        val paths2 = listOf("test", "main", "")
-        val paths3 = listOf("kotlin", "java", "")
+        val srcPaths = System.getProperty("kotlincommon.test.srcPaths", "").split(':')
         val extensions = listOf(".kt", ".java")
 
-        paths1.forEach { path1 ->
-            paths2.forEach { path2 ->
-                paths3.forEach { path3 ->
-                    extensions.forEach { extension ->
-                        val path = listOf(path1, path2, path3).joinToString("/").removePrefix("/")
-                        val file = File(path + "/" + className.replace('.', '/') + extension)
-                        if (file.exists()) return file
-                    }
-                }
+        (srcPaths + defaultSrcPaths()).forEach { path ->
+            extensions.forEach { extension ->
+                val file = File(path + "/" + className.replace('.', '/') + extension)
+                if (file.exists()) return file
             }
         }
         return null
+    }
+
+    private fun defaultSrcPaths(): Sequence<String> = sequence {
+        val paths1 = listOf("src", "")
+        val paths2 = listOf("test", "main", "")
+        val paths3 = listOf("kotlin", "java", "")
+        paths1.forEach { path1 ->
+            paths2.forEach { path2 ->
+                paths3.forEach { path3 ->
+                    yield(listOf(path1, path2, path3).joinToString("/").removePrefix("/"))
+                }
+            }
+        }
     }
 }
