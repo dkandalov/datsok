@@ -16,6 +16,7 @@ class UtilTests {
 
         "abc" shouldNotEqual 123
         123 shouldNotEqual "abc"
+        null shouldEqual null
 
         booleanArrayOf(true) shouldEqual booleanArrayOf(true)
         byteArrayOf(1) shouldEqual byteArrayOf(1)
