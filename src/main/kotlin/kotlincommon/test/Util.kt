@@ -8,9 +8,9 @@ import java.io.IOException
 import java.util.*
 
 
-infix fun <T> T.shouldEqual(that: T) = FailedAssertionFinder.withAssertionError("shouldEqual") {
-    if (this == that) return
-    if (this != null && that != null && areEqualArrays(this, that)) return
+infix fun <T> T.shouldEqual(that: T): T = FailedAssertionFinder.withAssertionError("shouldEqual") {
+    if (this == that) return this
+    if (this != null && that != null && areEqualArrays(this, that)) return this
 
     val (expectedPostfix, actualPostfix) =
         if (this != null && that != null && this.toPrintableString() == that.toPrintableString()) {
@@ -66,9 +66,9 @@ private fun areEqualArrays(o1: Any, o2: Any): Boolean =
 
 
 object FailedAssertionFinder {
-    inline fun <T> withAssertionError(functionName: String, f: () -> T) {
+    inline fun <T> withAssertionError(functionName: String, f: () -> T): T {
         try {
-            f()
+            return f()
         } catch (e: AssertionError) {
             val failedAssertion = findFailureFrame(e.stackTrace, "kotlincommon.test.UtilKt", functionName)?.readSourceCodeLine()
             if (failedAssertion != null) System.err.println("\nFailed at: $failedAssertion")

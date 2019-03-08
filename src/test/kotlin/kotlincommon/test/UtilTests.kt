@@ -31,6 +31,8 @@ class UtilTests {
         arrayOf(1) shouldEqual arrayOf(1)
         arrayOf(1, 2, "foo") shouldEqual arrayOf(1, 2, "foo")
         arrayOfNulls<Int>(size = 1) shouldEqual arrayOfNulls(size = 1)
+
+        (1 + 2 shouldEqual 3) * 5 shouldEqual 15
     }
 
     @Test fun `failing assertions`() {
