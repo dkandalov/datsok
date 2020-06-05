@@ -8,7 +8,7 @@ import java.io.IOException
 import java.util.*
 
 
-infix fun <T> T.shouldEqual(that: T): T = FailedAssertionFinder.withAssertionError("shouldEqual") {
+infix fun <T> T.shouldEqual(that: T): T = withAssertionError("shouldEqual") {
     if (this == that) return this
     if (this != null && that != null && areEqualArrays(this, that)) return this
 
@@ -37,30 +37,30 @@ infix fun <T> T.shouldNotEqual(that: T) = withAssertionError("shouldNotEqual") {
 }
 
 private fun Any?.toPrintableString(): String =
-    when {
-        this is Array<*>     -> Arrays.toString(this)
-        this is BooleanArray -> Arrays.toString(this)
-        this is ByteArray    -> Arrays.toString(this)
-        this is CharArray    -> Arrays.toString(this)
-        this is ShortArray   -> Arrays.toString(this)
-        this is IntArray     -> Arrays.toString(this)
-        this is LongArray    -> Arrays.toString(this)
-        this is FloatArray   -> Arrays.toString(this)
-        this is DoubleArray  -> Arrays.toString(this)
-        else                 -> this.toString()
+    when (this) {
+        is Array<*>     -> Arrays.toString(this)
+        is BooleanArray -> Arrays.toString(this)
+        is ByteArray    -> Arrays.toString(this)
+        is CharArray    -> Arrays.toString(this)
+        is ShortArray   -> Arrays.toString(this)
+        is IntArray     -> Arrays.toString(this)
+        is LongArray    -> Arrays.toString(this)
+        is FloatArray   -> Arrays.toString(this)
+        is DoubleArray  -> Arrays.toString(this)
+        else            -> this.toString()
     }
 
 private fun areEqualArrays(o1: Any, o2: Any): Boolean =
     when {
-        o1 is Array<*> && o2 is Array<*>         -> Arrays.deepEquals(o1, o2)
-        o1 is BooleanArray && o2 is BooleanArray -> Arrays.equals(o1, o2)
-        o1 is ByteArray && o2 is ByteArray       -> Arrays.equals(o1, o2)
-        o1 is CharArray && o2 is CharArray       -> Arrays.equals(o1, o2)
-        o1 is ShortArray && o2 is ShortArray     -> Arrays.equals(o1, o2)
-        o1 is IntArray && o2 is IntArray         -> Arrays.equals(o1, o2)
-        o1 is LongArray && o2 is LongArray       -> Arrays.equals(o1, o2)
-        o1 is FloatArray && o2 is FloatArray     -> Arrays.equals(o1, o2)
-        o1 is DoubleArray && o2 is DoubleArray   -> Arrays.equals(o1, o2)
+        o1 is Array<*> && o2 is Array<*>         -> o1.contentDeepEquals(o2)
+        o1 is BooleanArray && o2 is BooleanArray -> o1.contentEquals(o2)
+        o1 is ByteArray && o2 is ByteArray       -> o1.contentEquals(o2)
+        o1 is CharArray && o2 is CharArray       -> o1.contentEquals(o2)
+        o1 is ShortArray && o2 is ShortArray     -> o1.contentEquals(o2)
+        o1 is IntArray && o2 is IntArray         -> o1.contentEquals(o2)
+        o1 is LongArray && o2 is LongArray       -> o1.contentEquals(o2)
+        o1 is FloatArray && o2 is FloatArray     -> o1.contentEquals(o2)
+        o1 is DoubleArray && o2 is DoubleArray   -> o1.contentEquals(o2)
         else                                     -> false
     }
 
