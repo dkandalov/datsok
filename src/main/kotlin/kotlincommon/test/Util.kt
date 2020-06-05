@@ -23,12 +23,13 @@ infix fun <T> T.shouldEqual(that: T): T = withAssertionError("shouldEqual") {
             Pair("", "")
         }
 
-    // Use this particular wording and indentation (which mostly replicates hamcrest)
-    // so that IJ unit testing plugin can detect it and show <Click to see difference> link.
-    // Note that `this` and `that` are printed on the same column on purpose so that it's easier to compare them visually.
+    // Use this particular wording and indentation so that IJ shows <Click to see difference> link.
+    // Based on regex in https://github.com/JetBrains/intellij-community/blob/master/plugins/junit_rt/src/com/intellij/junit4/ExpectedPatterns.java#L28
+    // and using "Expected:... but was:..." format because IJ doesn't print failure twice for it.
+    // (Also note that when running tests via Gradle, IJ won't show diff link, see https://youtrack.jetbrains.com/issue/IDEA-221624)
     throw AssertionError(
-        "\nExpected: ${that.toPrintableString()}$expectedPostfix" +
-        "\n but: was ${this.toPrintableString()}$actualPostfix"
+        "Expected: ${that.toPrintableString()}$expectedPostfix" +
+        "\n but was: ${this.toPrintableString()}$actualPostfix"
     )
 }
 
@@ -71,7 +72,7 @@ object FailedAssertionFinder {
             return f()
         } catch (e: AssertionError) {
             val failedAssertion = findFailureFrame(e.stackTrace, "kotlincommon.test.UtilKt", functionName)?.readSourceCodeLine()
-            if (failedAssertion != null) System.err.println("\nFailed at: $failedAssertion")
+            if (failedAssertion != null) System.err.println("\nFailed at:\n$failedAssertion")
             throw e
         }
     }
