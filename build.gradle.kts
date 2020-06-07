@@ -1,3 +1,5 @@
+import java.net.URI
+
 plugins {
 	java
 	kotlin("jvm") version "1.3.72"
@@ -17,4 +19,25 @@ dependencies {
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
     kotlinOptions.jvmTarget = "11"
+}
+
+java {
+    withSourcesJar()
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("datsok") {
+            from(components["java"])
+        }
+    }
+    repositories {
+        maven {
+            url = URI("https://api.bintray.com/maven/dkandalov/maven/datsok/;publish=1")
+            credentials {
+                username = System.getenv("BINTRAY_USER")
+                password = System.getenv("BINTRAY_API_KEY")
+            }
+        }
+    }
 }
