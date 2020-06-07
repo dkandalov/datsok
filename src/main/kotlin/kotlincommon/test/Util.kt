@@ -14,7 +14,9 @@ infix fun <T> T.shouldEqual(that: T): T = withAssertionError("shouldEqual") {
 
     val (expectedPostfix, actualPostfix) =
         if (this != null && that != null && this.toPrintableString() == that.toPrintableString()) {
-            // Cast to Any because of this issue https://youtrack.jetbrains.com/issue/KT-20778
+            // Cast to Any because of Kotlin/IJ issues,
+            // see https://youtrack.jetbrains.com/issue/KT-20778, https://youtrack.jetbrains.com/issue/KT-39417
+            @Suppress("USELESS_CAST")
             Pair(
                 " (class " + (that as Any)::class.qualifiedName + ")",
                 " (class " + (this as Any)::class.qualifiedName + ")"
