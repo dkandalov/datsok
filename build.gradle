@@ -2,7 +2,7 @@ plugins {
 	id 'org.jetbrains.kotlin.jvm' version '1.3.72'
 }
 
-group "dkandalov"
+group "datsok"
 version "0.1.4"
 
 apply plugin:"kotlin"
@@ -27,17 +27,4 @@ task sourcesJar(type:Jar, dependsOn:classes) {
 
 artifacts {
 	archives sourcesJar
-}
-
-task publishJars(dependsOn:build) {
-	doLast {
-		ant.copy(
-			file:"build/libs/kotlin-common-test-${version}.jar",
-			toFile:"jars/dkandalov-kotlin-common-test-${version}.jar"
-		)
-		ant.copy(
-			file:"build/libs/kotlin-common-test-${version}-sources.jar",
-			toFile:"jars/dkandalov-kotlin-common-test-${version}-sources.jar"
-		)
-	}
 }

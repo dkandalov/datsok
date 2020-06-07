@@ -1,8 +1,6 @@
-@file:Suppress("unused")
+package datsok
 
-package kotlincommon.test
-
-import kotlincommon.test.FailedAssertionFinder.withAssertionError
+import datsok.FailedAssertionFinder.withAssertionError
 import java.io.File
 import java.io.IOException
 import java.util.*
@@ -73,7 +71,7 @@ object FailedAssertionFinder {
         try {
             return f()
         } catch (e: AssertionError) {
-            val failedAssertion = findFailureFrame(e.stackTrace, "kotlincommon.test.UtilKt", functionName)?.readSourceCodeLine()
+            val failedAssertion = findFailureFrame(e.stackTrace, "datsok.UtilKt", functionName)?.readSourceCodeLine()
             if (failedAssertion != null) System.err.println("\nFailed at:\n$failedAssertion")
             throw e
         }
@@ -99,7 +97,7 @@ object FailedAssertionFinder {
         }
 
     private fun findSourceCodeFor(className: String): File? {
-        val srcPaths = System.getProperty("kotlincommon.test.srcPaths", "").split(':')
+        val srcPaths = System.getProperty("datsok.srcPaths", "").split(':')
         val extensions = listOf(".kt", ".java")
 
         (srcPaths + defaultSrcPaths()).forEach { path ->

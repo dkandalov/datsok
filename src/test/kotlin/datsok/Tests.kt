@@ -1,11 +1,11 @@
-package kotlincommon.test
+package datsok
 
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Assert.fail
 import org.junit.Test
 
-class UtilTests {
+class Tests {
     @Test fun `passing assertions`() {
         1 shouldEqual 1
         1 shouldNotEqual 2
