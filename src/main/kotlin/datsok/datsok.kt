@@ -6,7 +6,7 @@ import java.io.IOException
 import java.util.*
 
 
-infix fun <T> T.shouldEqual(that: T): T = withAssertionError("shouldEqual") {
+infix fun <T> T.shouldEqual(that: T): T = withAssertionError<T>("shouldEqual") {
     if (this == that) return this
     if (this != null && that != null && areEqualArrays(this, that)) return this
 
@@ -19,6 +19,8 @@ infix fun <T> T.shouldEqual(that: T): T = withAssertionError("shouldEqual") {
                 " (class " + (that as Any)::class.qualifiedName + ")",
                 " (class " + (this as Any)::class.qualifiedName + ")"
             )
+        } else if (this.toPrintableString().trim() == that.toPrintableString().trim()) {
+            Pair("", "\n(different because of prefix/postfix whitespaces)")
         } else {
             Pair("", "")
         }

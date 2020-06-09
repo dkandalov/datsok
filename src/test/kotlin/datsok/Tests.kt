@@ -50,6 +50,19 @@ class Tests {
             | but was: 1 (class kotlin.String)
         """.trimMargin())
 
+        expectFailure({ "1" shouldEqual "1 " }, """
+            |Expected: 1 
+            | but was: 1
+            |(different because of prefix/postfix whitespaces)
+        """.trimMargin())
+
+        expectFailure({ "1\n" shouldEqual "1" }, """
+            |Expected: 1
+            | but was: 1
+            |
+            |(different because of prefix/postfix whitespaces)
+        """.trimMargin())
+
         expectFailure({ 1 shouldNotEqual 1 }, """
             Expected value not equal to: 1
             """.trimIndent()
