@@ -39,6 +39,15 @@ infix fun <T> T.shouldNotEqual(that: T) = withAssertionError("shouldNotEqual") {
     if (this == that) throw AssertionError("Expected value not equal to: $that")
 }
 
+inline fun <reified T> shouldThrow(f: () -> Unit) {
+    try {
+        f()
+        throw AssertionError("Expected exception ${T::class.qualifiedName}")
+    } catch (e: Exception) {
+        if (e !is T) throw AssertionError("Expected exception ${T::class.qualifiedName} but was ${e.javaClass.canonicalName}")
+    }
+}
+
 private fun Any?.toPrintableString(): String =
     when (this) {
         is Array<*>     -> Arrays.toString(this)
