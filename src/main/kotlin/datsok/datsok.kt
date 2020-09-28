@@ -39,7 +39,16 @@ infix fun <T> T.shouldNotEqual(that: T) = withAssertionError("shouldNotEqual") {
     if (this == that) throw AssertionError("Expected value not equal to: $that")
 }
 
-inline fun <reified T> shouldThrow(f: () -> Unit) {
+fun <T: Exception> shouldThrow(expected: T, f: () -> Unit) {
+    try {
+        f()
+        throw AssertionError("Expected exception $expected")
+    } catch (e: Exception) {
+        if (e != expected) throw AssertionError("Expected exception $expected but was $e")
+    }
+}
+
+inline fun <reified T: Exception> shouldThrow(f: () -> Unit) {
     try {
         f()
         throw AssertionError("Expected exception ${T::class.qualifiedName}")

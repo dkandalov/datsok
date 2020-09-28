@@ -96,6 +96,12 @@ class ShouldThrowTests {
         shouldThrow<IllegalStateException> { throw IllegalStateException() }
         shouldThrow<RuntimeException> { throw IllegalStateException() }
         shouldThrow<Exception> { throw IllegalStateException() }
+
+        shouldThrow(SomeException("a message")) { throw SomeException("a message") }
+
+        // Shouldn't compile
+        // shouldThrow<Throwable> { throw IllegalStateException() }
+        // shouldThrow<Error> { throw InternalError() }
     }
 
     @Test fun `failing assertions`() {
@@ -107,7 +113,18 @@ class ShouldThrowTests {
             action = { shouldThrow<IllegalStateException> { throw NullPointerException() } },
             expectedMessage = "Expected exception java.lang.IllegalStateException but was java.lang.NullPointerException"
         )
+
+        expectAssertionError(
+            action = { shouldThrow(SomeException("foo")) { throw SomeException("bar") } },
+            expectedMessage = "Expected exception SomeException(message=foo) but was SomeException(message=bar)"
+        )
+        expectAssertionError(
+            action = { shouldThrow(SomeException("foo")) { throw NullPointerException() } },
+        expectedMessage = "Expected exception SomeException(message=foo) but was java.lang.NullPointerException"
+        )
     }
+
+    private data class SomeException(override val message: String): Exception()
 }
 
 private fun expectAssertionError(action: () -> Unit, expectedMessage: String) {
