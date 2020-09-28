@@ -89,13 +89,32 @@ class ShouldEqualTests {
             """.trimMargin()
         )
     }
+}
 
-    private fun expectAssertionError(failingTest: () -> Unit, expectedMessage: String) {
-        try {
-            failingTest()
-            fail("Expected failure")
-        } catch (e: AssertionError) {
-            assertThat(e.message, equalTo(expectedMessage))
-        }
+class ShouldThrowTests {
+    @Test fun `passing assertions`() {
+        shouldThrow<IllegalStateException> { throw IllegalStateException() }
+        shouldThrow<RuntimeException> { throw IllegalStateException() }
+        shouldThrow<Exception> { throw IllegalStateException() }
+    }
+
+    @Test fun `failing assertions`() {
+        expectAssertionError(
+            action = { shouldThrow<IllegalStateException> { Unit } },
+            expectedMessage = "Expected exception java.lang.IllegalStateException"
+        )
+        expectAssertionError(
+            action = { shouldThrow<IllegalStateException> { throw NullPointerException() } },
+            expectedMessage = "Expected exception java.lang.IllegalStateException but was java.lang.NullPointerException"
+        )
+    }
+}
+
+private fun expectAssertionError(action: () -> Unit, expectedMessage: String) {
+    try {
+        action()
+        fail("Expected failure")
+    } catch (e: AssertionError) {
+        assertThat(e.message, equalTo(expectedMessage))
     }
 }
