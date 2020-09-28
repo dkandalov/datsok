@@ -5,7 +5,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Assert.fail
 import org.junit.Test
 
-class Tests {
+class ShouldEqualTests {
     @Test fun `passing assertions`() {
         1 shouldEqual 1
         1 shouldNotEqual 2
@@ -35,62 +35,62 @@ class Tests {
     }
 
     @Test fun `failing assertions`() {
-        expectFailure({ 1 shouldEqual 2 }, """
+        expectAssertionError({ 1 shouldEqual 2 }, """
             |Expected: 2
             | but was: 1
         """.trimMargin())
 
-        expectFailure({ 1 shouldEqual 1L }, """
+        expectAssertionError({ 1 shouldEqual 1L }, """
             |Expected: 1 (class kotlin.Long)
             | but was: 1 (class kotlin.Int)
         """.trimMargin())
 
-        expectFailure({ "1" shouldEqual 1 }, """
+        expectAssertionError({ "1" shouldEqual 1 }, """
             |Expected: 1 (class kotlin.Int)
             | but was: 1 (class kotlin.String)
         """.trimMargin())
 
-        expectFailure({ "1" shouldEqual "1 " }, """
+        expectAssertionError({ "1" shouldEqual "1 " }, """
             |Expected: 1 
             | but was: 1
             |(different because of prefix/postfix whitespaces)
         """.trimMargin())
 
-        expectFailure({ "1\n" shouldEqual "1" }, """
+        expectAssertionError({ "1\n" shouldEqual "1" }, """
             |Expected: 1
             | but was: 1
             |
             |(different because of prefix/postfix whitespaces)
         """.trimMargin())
 
-        expectFailure({ 1 shouldNotEqual 1 }, """
+        expectAssertionError({ 1 shouldNotEqual 1 }, """
             Expected value not equal to: 1
             """.trimIndent()
         )
 
-        expectFailure({ arrayOf(1) shouldEqual arrayOf(1, 2) }, """
+        expectAssertionError({ arrayOf(1) shouldEqual arrayOf(1, 2) }, """
             |Expected: [1, 2]
             | but was: [1]
             """.trimMargin()
         )
-        expectFailure({ intArrayOf(1) shouldEqual intArrayOf(1, 2) }, """
+        expectAssertionError({ intArrayOf(1) shouldEqual intArrayOf(1, 2) }, """
             |Expected: [1, 2]
             | but was: [1]
             """.trimMargin()
         )
-        expectFailure({ intArrayOf(1, 2) shouldEqual arrayOf(1, 2) }, """
+        expectAssertionError({ intArrayOf(1, 2) shouldEqual arrayOf(1, 2) }, """
             |Expected: [1, 2] (class kotlin.Array)
             | but was: [1, 2] (class kotlin.IntArray)
             """.trimMargin()
         )
-        expectFailure({ arrayOfNulls<Int>(size = 1) shouldEqual arrayOfNulls(size = 3) }, """
+        expectAssertionError({ arrayOfNulls<Int>(size = 1) shouldEqual arrayOfNulls(size = 3) }, """
             |Expected: [null, null, null]
             | but was: [null]
             """.trimMargin()
         )
     }
 
-    private fun expectFailure(failingTest: () -> Unit, expectedMessage: String) {
+    private fun expectAssertionError(failingTest: () -> Unit, expectedMessage: String) {
         try {
             failingTest()
             fail("Expected failure")
