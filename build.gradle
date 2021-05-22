@@ -1,5 +1,6 @@
 plugins {
 	id 'org.jetbrains.kotlin.jvm' version '1.4.32'
+	id 'ivy-publish'
 }
 
 group "datsok"
@@ -28,7 +29,15 @@ artifacts {
 	archives sourcesJar
 }
 
-task publishJars(dependsOn:build) {
+publishing {
+	publications {
+		ivy(IvyPublication) {
+			from components.java
+		}
+	}
+}
+
+task publishJars(dependsOn:[build, generateDescriptorFileForIvyPublication]) {
 	doLast {
 		ant.copy(
 			file:"build/libs/datsok-${version}.jar",
@@ -37,5 +46,9 @@ task publishJars(dependsOn:build) {
 		ant.copy(
 			file:"build/libs/datsok-${version}-sources.jar",
 			toFile:"jars/datsok-${version}-sources.jar"
+		)
+		ant.copy(
+			file:"build/publications/ivy/ivy.xml",
+			toFile:"jars/ivy-${version}.xml"
 		)
 }}
