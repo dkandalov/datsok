@@ -7,14 +7,14 @@ import org.junit.Test
 
 class ShouldEqualTests {
     @Test fun `passing assertions`() {
-        1 shouldEqual 1
-        1 shouldNotEqual 2
+        123 shouldEqual 123
+        123 shouldNotEqual 42
 
-        "abc" shouldEqual "abc"
-        "abc" shouldNotEqual "bcd"
+        "foo" shouldEqual "foo"
+        "foo" shouldNotEqual "bar"
 
-        "abc" shouldNotEqual 123
-        123 shouldNotEqual "abc"
+        "foo" shouldNotEqual 123
+        123 shouldNotEqual "foo"
         null shouldEqual null
 
         booleanArrayOf(true) shouldEqual booleanArrayOf(true)
@@ -27,7 +27,7 @@ class ShouldEqualTests {
         doubleArrayOf(1.0) shouldEqual doubleArrayOf(1.0)
 
         emptyArray<Int>() shouldEqual emptyArray()
-        arrayOf(1) shouldEqual arrayOf(1)
+        arrayOf(1, 2, 3) shouldEqual arrayOf(1, 2, 3)
         arrayOf(1, 2, "foo") shouldEqual arrayOf(1, 2, "foo")
         arrayOfNulls<Int>(size = 1) shouldEqual arrayOfNulls(size = 1)
 
@@ -106,7 +106,7 @@ class ShouldThrowTests {
 
     @Test fun `failing assertions`() {
         expectAssertionError(
-            action = { shouldThrow<IllegalStateException> { Unit } },
+            action = { shouldThrow<IllegalStateException> { } },
             expectedMessage = "Expected exception java.lang.IllegalStateException"
         )
         expectAssertionError(
@@ -120,7 +120,7 @@ class ShouldThrowTests {
         )
         expectAssertionError(
             action = { shouldThrow(SomeException("foo")) { throw NullPointerException() } },
-        expectedMessage = "Expected exception SomeException(message=foo) but was java.lang.NullPointerException"
+            expectedMessage = "Expected exception SomeException(message=foo) but was java.lang.NullPointerException"
         )
     }
 
