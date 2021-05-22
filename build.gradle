@@ -1,0 +1,41 @@
+plugins {
+	id 'org.jetbrains.kotlin.jvm' version '1.4.32'
+}
+
+group "datsok"
+version "0.5"
+
+apply plugin:"kotlin"
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	api "org.jetbrains.kotlin:kotlin-stdlib"
+	implementation "junit:junit:4.13.2"
+}
+
+compileKotlin.kotlinOptions.jvmTarget = "11"
+compileTestKotlin.kotlinOptions.jvmTarget = "11"
+
+task sourcesJar(type:Jar, dependsOn:classes) {
+	archiveClassifier.set("sources")
+	from sourceSets.main.allSource
+}
+
+artifacts {
+	archives sourcesJar
+}
+
+task publishJars(dependsOn:build) {
+	doLast {
+		ant.copy(
+			file:"build/libs/datsok-${version}.jar",
+			toFile:"jars/datsok-${version}.jar"
+		)
+		ant.copy(
+			file:"build/libs/datsok-${version}-sources.jar",
+			toFile:"jars/datsok-${version}-sources.jar"
+		)
+}}
