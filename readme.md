@@ -18,7 +18,7 @@ shouldThrow(SomeException("a message")) { throw SomeException("a message") }
 
 ### Adding Gradle dependency
 The library is only published on GitHub, so you'll need the following to add dependency in Gradle:
-```
+```groovy
 repositories {
 	mavenCentral()
     ivy {
@@ -26,7 +26,7 @@ repositories {
     }
 }
 dependencies {
-    ...
+    // ...
 	testImplementation("datsok:datsok:0.5")
 }
 ```
