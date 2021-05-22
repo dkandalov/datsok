@@ -1,3 +1,5 @@
+![Build Status](https://github.com/dkandalov/datsok/workflows/CI/badge.svg)
+
 This is a minimal library with assertions for writing tests in Kotlin.
 It has no dependencies except Kotlin stdlib and has only three functions `shouldEqual`, `shouldNotEqual` and `shouldThrow`.
 
