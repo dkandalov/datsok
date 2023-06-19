@@ -24,7 +24,7 @@ The library is only published on GitHub, so you'll need the following to add dep
 repositories {
     mavenCentral()
     ivy {
-        artifactPattern("https://raw.githubusercontent.com/dkandalov/datsok/master/jars/[artifact]-[revision](.[ext])")
+        artifactPattern("https://raw.githubusercontent.com/dkandalov/[module]/master/jars/[artifact]-[revision](.[ext])")
     }
 }
 dependencies {
