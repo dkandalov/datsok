@@ -8,10 +8,6 @@ import org.junit.Test
 
 class ShouldEqualTests {
     @Test fun `passing assertions`() {
-//        throw AssertionError("foo")
-//        assertEquals("fixme", "bar")
-
-//        123 shouldEqual 111
         123 shouldNotEqual 42
 
         "foo" shouldEqual "foo"
