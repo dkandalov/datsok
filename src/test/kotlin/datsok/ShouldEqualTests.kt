@@ -3,11 +3,16 @@ package datsok
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Assert.fail
-import org.junit.Test
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Assertions.assertEquals
+
 
 class ShouldEqualTests {
     @Test fun `passing assertions`() {
-        123 shouldEqual 123
+//        throw AssertionError("foo")
+//        assertEquals("fixme", "bar")
+
+//        123 shouldEqual 111
         123 shouldNotEqual 42
 
         "foo" shouldEqual "foo"
@@ -124,7 +129,7 @@ class ShouldThrowTests {
         )
     }
 
-    private data class SomeException(override val message: String): Exception()
+    private data class SomeException(override val message: String) : Exception()
 }
 
 private fun expectAssertionError(action: () -> Unit, expectedMessage: String) {

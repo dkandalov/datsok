@@ -35,56 +35,31 @@ data class Difference(
     val rightLines: List<String>
 )
 
-internal fun longestCommonSubsequence_new(leftLines: List<String>, rightLines: List<String>): List<Match> {
-    val (longList, shortList) = if (leftLines.size < rightLines.size) Pair(rightLines, leftLines) else Pair(leftLines, rightLines)
-    var lengths = Array(2) { IntArray(shortList.size + 1) }
-
-    val lcs = mutableListOf<Match>()
-
-    for (i in longList.indices.reversed()) {
-        val newLengths = Array(shortList.size + 1) { 0 }
-        for (j in shortList.indices.reversed()) {
-            if (longList[i] == shortList[j]) {
-                newLengths[j] = lengths[1][j + 1] + 1
-                lcs.add(Match(i, j))
-            } else {
-                newLengths[j] = maxOf(lengths[1][j], newLengths[j + 1])
-            }
-        }
-        lengths = arrayOf(newLengths.toIntArray(), lengths[0])
-    }
-
-    return lcs.asReversed()
-}
-
-
-internal fun longestCommonSubsequence(leftLines: List<String>, rightLines: List<String>): List<Match> {
+internal fun longestCommonSubsequence(leftLines: List<String>, rightLines: List<String>): Sequence<Match> {
     val lengths = Array(leftLines.size + 1) { IntArray(rightLines.size + 1) }
     leftLines.indices.reversed().forEach { i ->
         rightLines.indices.reversed().forEach { j ->
-            if (leftLines[i] == rightLines[j]) {
-                lengths[i][j] = lengths[i + 1][j + 1] + 1
-            } else {
-                lengths[i][j] = maxOf(lengths[i + 1][j], lengths[i][j + 1])
-            }
+            lengths[i][j] =
+                if (leftLines[i] == rightLines[j]) lengths[i + 1][j + 1] + 1
+                else maxOf(lengths[i + 1][j], lengths[i][j + 1])
         }
     }
 
     var i = 0
     var j = 0
-    val result = ArrayList<Match>()
-    while (i < leftLines.size && j < rightLines.size) {
-        when {
-            leftLines[i] == rightLines[j] -> {
-                result.add(Match(left = i, right = j))
-                i++
-                j++
+    return sequence {
+        while (i < leftLines.size && j < rightLines.size) {
+            when {
+                leftLines[i] == rightLines[j] -> {
+                    yield(Match(left = i, right = j))
+                    i++
+                    j++
+                }
+                lengths[i + 1][j] >= lengths[i][j + 1] -> i++
+                else -> j++
             }
-            lengths[i + 1][j] >= lengths[i][j + 1] -> i++
-            else -> j++
         }
     }
-    return result
 }
 
 internal data class Match(val left: Int, val right: Int)

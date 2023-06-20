@@ -125,14 +125,14 @@ class LineByLineDiffTests {
 
 class LongestCommonSubsequenceTests {
     @Test fun `empty input is empty subsequence`() {
-        longestCommonSubsequence(leftLines = emptyList(), rightLines = emptyList()) shouldEqual emptyList()
+        longestCommonSubsequence(leftLines = emptyList(), rightLines = emptyList()).toList() shouldEqual emptyList()
     }
 
     @Test fun `one matching line`() {
         longestCommonSubsequence(
             leftLines = listOf("Hello"),
             rightLines = listOf("Hello")
-        ) shouldEqual listOf(
+        ).toList() shouldEqual listOf(
             Match(left = 0, right = 0)
         )
     }
@@ -141,7 +141,7 @@ class LongestCommonSubsequenceTests {
         longestCommonSubsequence(
             leftLines = listOf("Line 1", "Line 2", "Line 3"),
             rightLines = listOf("Line 1", "Line 2", "Line 3")
-        ) shouldEqual listOf(
+        ).toList() shouldEqual listOf(
             Match(left = 0, right = 0),
             Match(left = 1, right = 1),
             Match(left = 2, right = 2)
@@ -152,7 +152,7 @@ class LongestCommonSubsequenceTests {
         longestCommonSubsequence(
             leftLines = listOf("Line 1", "Line 2", "Line 3"),
             rightLines = listOf("Line 1", "Line 3")
-        ) shouldEqual listOf(
+        ).toList() shouldEqual listOf(
             Match(left = 0, right = 0),
             Match(left = 2, right = 1)
         )
@@ -162,28 +162,28 @@ class LongestCommonSubsequenceTests {
         longestCommonSubsequence(
             leftLines = listOf("Line 1", "Line 2", "Line 3"),
             rightLines = listOf("Line 4", "Line 5", "Line 6")
-        ) shouldEqual emptyList()
+        ).toList() shouldEqual emptyList()
     }
 
     @Test fun `empty left input is empty subsequence`() {
         longestCommonSubsequence(
             leftLines = emptyList(),
             rightLines = listOf("Line 1", "Line 2", "Line 3")
-        ) shouldEqual emptyList()
+        ).toList() shouldEqual emptyList()
     }
 
     @Test fun `empty right input is empty subsequence`() {
         longestCommonSubsequence(
             leftLines = listOf("Line 1", "Line 2", "Line 3"),
             rightLines = emptyList()
-        ) shouldEqual emptyList()
+        ).toList() shouldEqual emptyList()
     }
 
     @Test fun `repeated line`() {
         longestCommonSubsequence(
             leftLines = listOf("Line 1", "Line 2", "Line 2", "Line 3"),
             rightLines = listOf("Line 1", "Line 2", "Line 3")
-        ) shouldEqual listOf(
+        ).toList() shouldEqual listOf(
             Match(left = 0, right = 0),
             Match(left = 1, right = 1),
             Match(left = 3, right = 2)
@@ -194,7 +194,7 @@ class LongestCommonSubsequenceTests {
         longestCommonSubsequence(
             leftLines = listOf("Line 1", "Line 2", "Line 3"),
             rightLines = listOf("Line 3", "Line 2", "Line 1")
-        ) shouldEqual listOf(
+        ).toList() shouldEqual listOf(
             Match(left = 2, right = 0)
         )
     }
@@ -203,16 +203,16 @@ class LongestCommonSubsequenceTests {
         longestCommonSubsequence(
             leftLines = listOf("Line 1", "Line 2", "Line 3"),
             rightLines = listOf("Line 2")
-        ) shouldEqual listOf(
+        ).toList() shouldEqual listOf(
             Match(left = 1, right = 0)
         )
     }
 
-    @Test fun `large inputs`() {
+    @Test fun `large input`() {
         val random = Random(123)
-        longestCommonSubsequence_new(
-            leftLines = List(size = 10_000) { "Line $it" }.shuffled(random),
-            rightLines = List(size = 10_000) { "Line $it" }.shuffled(random)
-        )
+        longestCommonSubsequence(
+            leftLines = List(size = 20_000) { "Line $it" }.shuffled(random),
+            rightLines = List(size = 20_000) { "Line $it" }.shuffled(random)
+        ).count()
     }
 }
