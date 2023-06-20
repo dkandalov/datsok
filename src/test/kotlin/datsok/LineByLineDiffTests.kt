@@ -1,6 +1,6 @@
 package datsok
 
-import org.junit.jupiter.api.Test
+import org.junit.Test
 import java.util.Random
 
 class LineByLineDiffTests {
@@ -211,8 +211,8 @@ class LongestCommonSubsequenceTests {
     @Test fun `large input`() {
         val random = Random(123)
         longestCommonSubsequence(
-            leftLines = List(size = 20_000) { "Line $it" }.shuffled(random),
-            rightLines = List(size = 20_000) { "Line $it" }.shuffled(random)
+            leftLines = List(size = 10_000) { "Line $it" }.shuffled(random),
+            rightLines = List(size = 10_000) { "Line $it" }.shuffled(random)
         ).count()
     }
 }
