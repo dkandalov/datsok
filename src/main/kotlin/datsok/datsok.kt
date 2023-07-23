@@ -3,7 +3,6 @@ package datsok
 import datsok.FailedAssertionFinder.withAssertionError
 import java.io.File
 import java.io.IOException
-import java.util.*
 
 
 infix fun <T> T.shouldEqual(that: T): T = withAssertionError<T>("shouldEqual") {
@@ -59,15 +58,15 @@ inline fun <reified T: Exception> shouldThrow(f: () -> Unit) {
 
 private fun Any?.toPrintableString(): String =
     when (this) {
-        is Array<*>     -> Arrays.toString(this)
-        is BooleanArray -> Arrays.toString(this)
-        is ByteArray    -> Arrays.toString(this)
-        is CharArray    -> Arrays.toString(this)
-        is ShortArray   -> Arrays.toString(this)
-        is IntArray     -> Arrays.toString(this)
-        is LongArray    -> Arrays.toString(this)
-        is FloatArray   -> Arrays.toString(this)
-        is DoubleArray  -> Arrays.toString(this)
+        is Array<*>     -> this.contentToString()
+        is BooleanArray -> this.contentToString()
+        is ByteArray    -> this.contentToString()
+        is CharArray    -> this.contentToString()
+        is ShortArray   -> this.contentToString()
+        is IntArray     -> this.contentToString()
+        is LongArray    -> this.contentToString()
+        is FloatArray   -> this.contentToString()
+        is DoubleArray  -> this.contentToString()
         else            -> this.toString()
     }
 

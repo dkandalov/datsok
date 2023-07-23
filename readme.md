@@ -29,6 +29,6 @@ repositories {
 }
 dependencies {
     // ...
-    testImplementation("datsok:datsok:0.5")
+    testImplementation("datsok:datsok:0.6")
 }
 ```
